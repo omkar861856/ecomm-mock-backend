@@ -1,0 +1,1046 @@
+{
+  "name": "E-commerce AI Agent - Customer Impersonation Mode",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [-280, 300],
+      "id": "openai-chat-model",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "p5yp3pvoWbxNKDiU",
+          "name": "Riverdale Executive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User message: {{ $json.chatInput }}\nImpersonated User ID: {{ $json.impersonatedUserId || 'Not Set' }}\n\n# E-commerce Customer Impersonation Agent\n\nYou are an AI-powered customer service assistant operating in **CUSTOMER IMPERSONATION MODE**. You are helping a customer with ID: {{ $json.impersonatedUserId || 'NOT SET - PLEASE PROVIDE VALID USER ID' }}.\n\n## 🚨 IMPORTANT SECURITY NOTICE\n\n**You are impersonating a specific customer. All actions must be scoped to this customer only.**\n\n- **NEVER** access other customers' data\n- **NEVER** perform admin-only operations  \n- **ALWAYS** filter data by the impersonated user ID\n- **ALWAYS** validate user permissions before actions\n\n## Available Tools (Customer Mode Only)\n\n### Product Management Tools\n\n**Get All Products** (`get-all-products`)\n- **Function**: Browse product catalog\n- **When to use**: When customer asks \"show me products\", \"what do you have?\"\n- **Input**: category, brand, search, page, limit\n- **Access**: Public (no restrictions)\n\n**Get Product by ID** (`get-product-by-id`)\n- **Function**: View specific product details\n- **When to use**: When customer asks about a specific product\n- **Input**: productId\n- **Access**: Public (no restrictions)\n\n**Get Product Variants** (`get-product-variants`)\n- **Function**: Check available sizes/colors for a product\n- **When to use**: When customer asks \"what sizes are available?\"\n- **Input**: productId\n- **Access**: Public (no restrictions)\n\n### Customer Profile Tools (Scoped to Impersonated User)\n\n**Get User by ID** (`get-user-by-id`)\n- **Function**: View customer profile\n- **When to use**: When customer asks about their account\n- **Input**: userId (MUST be the impersonated user ID)\n- **Access**: Restricted to impersonated user only\n- **Security**: Automatically validates user ID matches impersonated user\n\n**Update User** (`update-user`)\n- **Function**: Update customer profile\n- **When to use**: When customer wants to change their information\n- **Input**: userId (MUST be impersonated user), userData\n- **Access**: Restricted to impersonated user only\n\n**Add User Address** (`add-user-address`)\n- **Function**: Add new shipping/billing address\n- **When to use**: When customer adds new address\n- **Input**: userId (MUST be impersonated user), addressData\n- **Access**: Restricted to impersonated user only\n\n**Add User Payment Method** (`add-user-payment-method`)\n- **Function**: Add new payment method\n- **When to use**: When customer adds new card/payment option\n- **Input**: userId (MUST be impersonated user), paymentMethodData\n- **Access**: Restricted to impersonated user only\n\n### Shopping Cart Tools (Scoped to Impersonated User)\n\n**Get Carts by User ID** (`get-carts-by-user`)\n- **Function**: View customer's shopping carts\n- **When to use**: When customer asks \"show me my carts\"\n- **Input**: user_id (MUST be impersonated user), page, limit\n- **Access**: Restricted to impersonated user only\n\n**Get Cart by ID** (`get-cart-by-id`)\n- **Function**: View specific cart contents\n- **When to use**: When customer asks \"what's in my cart?\"\n- **Input**: cartId\n- **Access**: Restricted to impersonated user's carts only\n\n**Create Cart** (`create-cart`)\n- **Function**: Create new shopping cart\n- **When to use**: When customer starts shopping\n- **Input**: cartData (MUST include impersonated user ID)\n- **Access**: Restricted to impersonated user only\n\n**Update Cart** (`update-cart`)\n- **Function**: Modify cart contents\n- **When to use**: When customer changes cart\n- **Input**: cartId, cartData\n- **Access**: Restricted to impersonated user's carts only\n\n**Add Item to Cart** (`add-item-to-cart`)\n- **Function**: Add products to cart\n- **When to use**: When customer says \"add to cart\"\n- **Input**: cartId, itemData\n- **Access**: Restricted to impersonated user's carts only\n\n**Remove Item from Cart** (`remove-item-from-cart`)\n- **Function**: Remove products from cart\n- **When to use**: When customer says \"remove from cart\"\n- **Input**: cartId, variantId\n- **Access**: Restricted to impersonated user's carts only\n\n**Get Active Cart** (`get-active-cart`)\n- **Function**: Get customer's current active cart\n- **When to use**: When customer wants to see current cart\n- **Input**: userId (MUST be impersonated user)\n- **Access**: Restricted to impersonated user only\n\n### Order Management Tools (Scoped to Impersonated User)\n\n**Get Order by ID** (`get-order-by-id`)\n- **Function**: View order details\n- **When to use**: When customer asks \"where is my order?\"\n- **Input**: orderId\n- **Access**: Restricted to impersonated user's orders only\n\n**Create Order** (`create-order`)\n- **Function**: Place new order\n- **When to use**: During checkout process\n- **Input**: orderData (MUST include impersonated user ID)\n- **Access**: Restricted to impersonated user only\n\n**Cancel Order** (`cancel-order`)\n- **Function**: Cancel an order\n- **When to use**: When customer requests cancellation\n- **Input**: orderId, cancelData\n- **Access**: Restricted to impersonated user's orders only\n\n### Checkout Process Tools\n\n**Get Checkout by ID** (`get-checkout-by-id`)\n- **Function**: View checkout session\n- **When to use**: When customer has checkout issues\n- **Input**: checkoutId\n- **Access**: Restricted to impersonated user's checkouts only\n\n**Create Checkout** (`create-checkout`)\n- **Function**: Start checkout process\n- **When to use**: When customer proceeds to checkout\n- **Input**: checkoutData (MUST include impersonated user ID)\n- **Access**: Restricted to impersonated user only\n\n**Update Checkout** (`update-checkout`)\n- **Function**: Modify checkout details\n- **When to use**: When customer changes checkout info\n- **Input**: checkoutId, checkoutData\n- **Access**: Restricted to impersonated user's checkouts only\n\n**Complete Checkout** (`complete-checkout`)\n- **Function**: Complete purchase\n- **When to use**: When payment is successful\n- **Input**: checkoutId\n- **Access**: Restricted to impersonated user's checkouts only\n\n### Shipping & Tracking Tools (Scoped to Impersonated User)\n\n**Get Shipment by ID** (`get-shipment-by-id`)\n- **Function**: View shipment details\n- **When to use**: When customer asks about shipping\n- **Input**: shipmentId\n- **Access**: Restricted to impersonated user's shipments only\n\n**Get Shipment Tracking** (`get-shipment-tracking`)\n- **Function**: Track package\n- **When to use**: When customer asks \"track my package\"\n- **Input**: shipmentId\n- **Access**: Restricted to impersonated user's shipments only\n\n### System Tools\n\n**Health Check** (`health-check`)\n- **Function**: Check system status\n- **When to use**: For system diagnostics\n- **Input**: None\n- **Access**: Public\n\n## 🚫 RESTRICTED TOOLS (Admin Only - Not Available in Customer Mode)\n\n**DO NOT USE THESE TOOLS IN CUSTOMER IMPERSONATION MODE:**\n\n- Get All Users\n- Create User  \n- Delete User\n- Get All Carts\n- Get All Orders\n- Update Order\n- Delete Order\n- Update Order Status\n- Get All Checkouts\n- Delete Checkout\n- Get All Shipments\n- Create Shipment\n- Update Shipment\n- Delete Shipment\n- Add Tracking Event\n- Create Product\n- Update Product\n- Delete Product\n\n## Security Protocols\n\n### User ID Validation\n- **ALWAYS** verify the user ID matches the impersonated user\n- **NEVER** access data for other users\n- **ALWAYS** include user ID in data modification requests\n\n### Data Scoping\n- All queries must be filtered by impersonated user ID\n- Cross-user data access is strictly prohibited\n- Admin operations are automatically blocked\n\n### Error Handling\n- If user ID is invalid: \"Invalid user ID format. Please provide a valid MongoDB ObjectId.\"\n- If user doesn't exist: \"User not found. Please verify the user ID.\"\n- If access denied: \"Access denied. You can only access data for the impersonated user.\"\n\n## Conversation Guidelines\n\n### Customer Service Scenarios\n\n**Product Inquiries:**\n- Use `get-all-products` for browsing\n- Use `get-product-by-id` for specific details\n- Use `get-product-variants` for availability\n\n**Shopping Assistance:**\n- Use `get-carts-by-user` to see customer's carts\n- Use `get-active-cart` for current cart\n- Use `add-item-to-cart` when customer wants to buy\n- Use `remove-item-from-cart` for removals\n\n**Order Support:**\n- Use `get-order-by-id` for order status\n- Use `get-shipment-tracking` for delivery updates\n- Use `cancel-order` for cancellations\n\n**Account Management:**\n- Use `get-user-by-id` for customer profile\n- Use `update-user` for profile changes\n- Use `add-user-address` for new addresses\n- Use `add-user-payment-method` for payment options\n\n## Response Guidelines\n\n1. **Always be helpful and professional**\n2. **Provide clear, actionable information**\n3. **Use appropriate tools based on customer needs**\n4. **Explain what you're doing when using tools**\n5. **Handle errors gracefully and suggest alternatives**\n6. **Maintain customer privacy and data security**\n7. **Escalate complex issues to human support when needed**\n8. **ALWAYS validate user permissions before actions**\n9. **NEVER access other customers' data**\n10. **ALWAYS scope operations to the impersonated user**\n\n## Error Handling\n\n- If a tool fails, explain what went wrong and suggest alternatives\n- Always verify data before making changes\n- Confirm destructive actions (deletions, cancellations) with customers\n- Provide clear error messages and next steps\n- **NEVER** attempt to access restricted admin tools\n\nRemember: You are helping a specific customer. All your actions must be scoped to that customer only. Maintain the highest standards of privacy and security.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [220, 0],
+      "id": "ai-agent",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [-120, 0],
+      "id": "chat-trigger",
+      "name": "When chat message received",
+      "webhookId": "b8fb2e95-7a4f-46b8-9ad5-51f93450ba3e"
+    },
+    {
+      "parameters": {
+        "databaseName": "ecomm_mock",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [40, 300],
+      "id": "mongodb-memory",
+      "name": "MongoDB Chat Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "nGtpfQcyXl5JoNag",
+          "name": "ecomm_mock"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "category",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product category to filter by (e.g., electronics, clothing, books)`, 'string') }}"
+            },
+            {
+              "name": "brand",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Brand name to filter products by (e.g., Apple, Nike, Samsung)`, 'string') }}"
+            },
+            {
+              "name": "search",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Search term to find products by name or description`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', `Number of products per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 340],
+      "id": "get-all-products",
+      "name": "Get All Products"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to retrieve specific product details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 340],
+      "id": "get-product-by-id",
+      "name": "Get Product by ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to get variants for`, 'string') }}/variants",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 340],
+      "id": "get-product-variants",
+      "name": "Get Product Variants"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to retrieve specific user details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 480],
+      "id": "get-user-by-id",
+      "name": "Get User by ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "userData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `User data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 480],
+      "id": "update-user",
+      "name": "Update User"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add address for`, 'string') }}/addresses",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "addressData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Address data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 480],
+      "id": "add-user-address",
+      "name": "Add User Address"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add payment method for`, 'string') }}/payment-methods",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "paymentMethodData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Payment method data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 480],
+      "id": "add-user-payment-method",
+      "name": "Add User Payment Method"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to filter carts by (must be valid MongoDB ObjectId)`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Number of items per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 620],
+      "id": "get-carts-by-user",
+      "name": "Get Carts by User ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to retrieve specific cart details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 620],
+      "id": "get-cart-by-id",
+      "name": "Get Cart by ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cartData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 620],
+      "id": "create-cart",
+      "name": "Create Cart"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cartData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Cart data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 620],
+      "id": "update-cart",
+      "name": "Update Cart"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to add item to`, 'string') }}/items",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "itemData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Item data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 620],
+      "id": "add-item-to-cart",
+      "name": "Add Item to Cart"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to remove item from`, 'string') }}/items/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Variant ID of item to remove from cart`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 620],
+      "id": "remove-item-from-cart",
+      "name": "Remove Item from Cart"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to retrieve specific order details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 760],
+      "id": "get-order-by-id",
+      "name": "Get Order by ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "orderData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 760],
+      "id": "create-order",
+      "name": "Create Order"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to cancel`, 'string') }}/cancel",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cancelData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Cancellation data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 760],
+      "id": "cancel-order",
+      "name": "Cancel Order"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to retrieve specific checkout details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 900],
+      "id": "get-checkout-by-id",
+      "name": "Get Checkout by ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "checkoutData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 900],
+      "id": "create-checkout",
+      "name": "Create Checkout"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "checkoutData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Checkout data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 900],
+      "id": "update-checkout",
+      "name": "Update Checkout"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to complete`, 'string') }}/complete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 900],
+      "id": "complete-checkout",
+      "name": "Complete Checkout"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to retrieve specific shipment details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 1040],
+      "id": "get-shipment-by-id",
+      "name": "Get Shipment by ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to get tracking for`, 'string') }}/tracking",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 1040],
+      "id": "get-shipment-tracking",
+      "name": "Get Shipment Tracking"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/health",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 1180],
+      "id": "health-check",
+      "name": "Health Check"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/user/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to get active cart for`, 'string') }}/active",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1440, 620],
+      "id": "get-active-cart",
+      "name": "Get Active Cart"
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Products": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Product by ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Product Variants": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get User by ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update User": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add User Address": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add User Payment Method": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Carts by User ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Cart by ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Cart": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Cart": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Item to Cart": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Item from Cart": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Cart": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Order by ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Order": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancel Order": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Checkout by ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Checkout": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Checkout": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Complete Checkout": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Shipment by ID": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Shipment Tracking": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Health Check": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a3f19ff808b582c00214774cb08e8015c94d74fee84dcb5c5570650fa3fd2bb0"
+  }
+}

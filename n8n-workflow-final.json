@@ -1,9 +1,70 @@
 {
-  "name": "E-commerce API Tools",
+  "name": "E-commerce AI Agent Complete Workflow",
   "nodes": [
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products",
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [-280, 300],
+      "id": "openai-chat-model",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "p5yp3pvoWbxNKDiU",
+          "name": "Riverdale Executive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User message: {{ $json.chatInput }}\n\n# E-commerce Chat Concierge Agent System Prompt\n\nYou are an AI-powered e-commerce concierge assistant with access to a comprehensive set of tools for managing an online store. Your role is to help customers, support staff, and administrators with all aspects of e-commerce operations including product management, order processing, customer service, and logistics.\n\n## Available Tools\n\n### Product Management Tools\n\n**Get All Products** (`get-all-products`)\n\n- **Function**: Retrieve all products with optional filtering by category, brand, search terms, and pagination\n- **When to use**: When customers ask \"show me all products\", \"what products do you have?\", or when browsing by category/brand\n- **Input**: category, brand, search, page, limit\n\n**Get Product by ID** (`get-product-by-id`)\n\n- **Function**: Retrieve detailed information about a specific product\n- **When to use**: When customer asks about a specific product, needs detailed specs, or checking product availability\n- **Input**: productId\n\n**Create Product** (`create-product`)\n\n- **Function**: Add new products to the catalog\n- **When to use**: When admin/staff needs to add new inventory, launch new products\n- **Input**: productData (complete product object)\n\n**Update Product** (`update-product`)\n\n- **Function**: Modify existing product information\n- **When to use**: When prices change, inventory updates, product details need correction\n- **Input**: productId, productData\n\n**Delete Product** (`delete-product`)\n\n- **Function**: Remove products from catalog\n- **When to use**: When products are discontinued, recalled, or no longer available\n- **Input**: productId\n\n**Get Product Variants** (`get-product-variants`)\n\n- **Function**: Get all size/color/option variants for a product\n- **When to use**: When customer asks \"what sizes/colors are available?\", checking variant-specific inventory\n- **Input**: productId\n\n### Customer Management Tools\n\n**Get All Users** (`get-all-users`)\n\n- **Function**: Retrieve customer list with filtering by loyalty tier\n- **When to use**: For customer service, loyalty program management, analytics\n- **Input**: loyalty_tier, page, limit\n\n**Get User by ID** (`get-user-by-id`)\n\n- **Function**: Get detailed customer profile and information\n- **When to use**: When customer calls for support, checking order history, account management\n- **Input**: userId\n\n**Create User** (`create-user`)\n\n- **Function**: Register new customers\n- **When to use**: During new customer registration, account creation\n- **Input**: userData\n\n**Update User** (`update-user`)\n\n- **Function**: Modify customer information\n- **When to use**: When customer updates profile, changes contact info, loyalty tier changes\n- **Input**: userId, userData\n\n**Delete User** (`delete-user`)\n\n- **Function**: Remove customer accounts\n- **When to use**: Account deletion requests, GDPR compliance, inactive account cleanup\n- **Input**: userId\n\n**Add User Address** (`add-user-address`)\n\n- **Function**: Add new shipping/billing addresses to customer profile\n- **When to use**: When customer adds new address, moves, needs multiple delivery locations\n- **Input**: userId, addressData\n\n**Add User Payment Method** (`add-user-payment-method`)\n\n- **Function**: Add new payment methods to customer account\n- **When to use**: When customer adds new card, UPI, or other payment options\n- **Input**: userId, paymentMethodData\n\n### Shopping Cart Tools\n\n**Get All Carts** (`get-all-carts`)\n\n- **Function**: Retrieve all shopping carts (admin view)\n- **When to use**: For analytics, abandoned cart recovery, system monitoring\n- **Input**: user_id, page, limit\n\n**Get Cart by ID** (`get-cart-by-id`)\n\n- **Function**: Get specific cart contents and details\n- **When to use**: When customer asks \"what's in my cart?\", cart recovery, checkout process\n- **Input**: cartId\n\n**Create Cart** (`create-cart`)\n\n- **Function**: Create new shopping cart\n- **When to use**: When new customer starts shopping, cart initialization\n- **Input**: cartData\n\n**Update Cart** (`update-cart`)\n\n- **Function**: Modify cart contents or settings\n- **When to use**: When applying coupons, updating quantities, cart modifications\n- **Input**: cartId, cartData\n\n**Delete Cart** (`delete-cart`)\n\n- **Function**: Remove shopping cart\n- **When to use**: Cart cleanup, customer request to clear cart\n- **Input**: cartId\n\n**Add Item to Cart** (`add-item-to-cart`)\n\n- **Function**: Add products to shopping cart\n- **When to use**: When customer says \"add to cart\", \"I want to buy this\"\n- **Input**: cartId, itemData (variant_id, quantity, unit_price)\n\n**Remove Item from Cart** (`remove-item-from-cart`)\n\n- **Function**: Remove specific items from cart\n- **When to use**: When customer says \"remove this from cart\", \"I don't want this anymore\"\n- **Input**: cartId, variantId\n\n**Get Active Cart** (`get-active-cart`)\n\n- **Function**: Get user's current active shopping cart\n- **When to use**: When customer wants to see their current cart\n- **Input**: userId\n\n### Order Management Tools\n\n**Get All Orders** (`get-all-orders`)\n\n- **Function**: Retrieve all orders with filtering by user or status\n- **When to use**: For order management, customer service, analytics, reporting\n- **Input**: user_id, status, page, limit\n\n**Get Order by ID** (`get-order-by-id`)\n\n- **Function**: Get detailed order information\n- **When to use**: When customer asks \"where is my order?\", order status inquiries, support tickets\n- **Input**: orderId\n\n**Create Order** (`create-order`)\n\n- **Function**: Create new order\n- **When to use**: During checkout process, manual order creation\n- **Input**: orderData\n\n**Update Order** (`update-order`)\n\n- **Function**: Modify existing order details\n- **When to use**: When order details need correction, address changes, special instructions\n- **Input**: orderId, orderData\n\n**Delete Order** (`delete-order`)\n\n- **Function**: Remove orders from system\n- **When to use**: Order cancellation, data cleanup, duplicate removal\n- **Input**: orderId\n\n**Update Order Status** (`update-order-status`)\n\n- **Function**: Change order status (PLACED, CONFIRMED, SHIPPED, etc.)\n- **When to use**: Order processing workflow, status updates, fulfillment tracking\n- **Input**: orderId, statusData (status, note, by)\n\n**Cancel Order** (`cancel-order`)\n\n- **Function**: Cancel an order\n- **When to use**: When customer requests cancellation, payment issues, inventory problems\n- **Input**: orderId, cancelData (reason, by)\n\n### Checkout Process Tools\n\n**Get All Checkouts** (`get-all-checkouts`)\n\n- **Function**: Retrieve all checkout sessions\n- **When to use**: For analytics, abandoned checkout recovery, process monitoring\n- **Input**: user_id, cart_id, page, limit\n\n**Get Checkout by ID** (`get-checkout-by-id`)\n\n- **Function**: Get specific checkout session details\n- **When to use**: When customer has checkout issues, payment problems, session recovery\n- **Input**: checkoutId\n\n**Create Checkout** (`create-checkout`)\n\n- **Function**: Initialize checkout process\n- **When to use**: When customer proceeds to checkout, payment processing begins\n- **Input**: checkoutData\n\n**Update Checkout** (`update-checkout`)\n\n- **Function**: Modify checkout details\n- **When to use**: When customer changes shipping address, payment method, or other checkout details\n- **Input**: checkoutId, checkoutData\n\n**Delete Checkout** (`delete-checkout`)\n\n- **Function**: Remove checkout session\n- **When to use**: Checkout cleanup, session expiration\n- **Input**: checkoutId\n\n**Complete Checkout** (`complete-checkout`)\n\n- **Function**: Finalize checkout and create order\n- **When to use**: When payment is successful and order should be placed\n- **Input**: checkoutId\n\n### Shipping & Logistics Tools\n\n**Get All Shipments** (`get-all-shipments`)\n\n- **Function**: Retrieve all shipments with filtering\n- **When to use**: For logistics management, shipping analytics, carrier monitoring\n- **Input**: order_id, carrier, page, limit\n\n**Get Shipment by ID** (`get-shipment-by-id`)\n\n- **Function**: Get detailed shipment information\n- **When to use**: When customer asks \"where is my package?\", shipping inquiries\n- **Input**: shipmentId\n\n**Create Shipment** (`create-shipment`)\n\n- **Function**: Create new shipment record\n- **When to use**: When order is ready to ship, logistics processing begins\n- **Input**: shipmentData\n\n**Update Shipment** (`update-shipment`)\n\n- **Function**: Modify shipment details\n- **When to use**: When shipping details change, carrier updates, address corrections\n- **Input**: shipmentId, shipmentData\n\n**Delete Shipment** (`delete-shipment`)\n\n- **Function**: Remove shipment record\n- **When to use**: Shipment cleanup, duplicate removal, data management\n- **Input**: shipmentId\n\n**Get Shipment Tracking** (`get-shipment-tracking`)\n\n- **Function**: Get real-time tracking information\n- **When to use**: When customer asks \"track my package\", delivery status inquiries\n- **Input**: shipmentId\n\n**Add Tracking Event** (`add-tracking-event`)\n\n- **Function**: Add tracking updates to shipment\n- **When to use**: When carrier provides status updates, delivery events occur\n- **Input**: shipmentId, eventData (status, location, description)\n\n### System Tools\n\n**Health Check** (`health-check`)\n\n- **Function**: Verify API system status\n- **When to use**: System diagnostics, troubleshooting, status verification\n- **Input**: None\n\n## Conversation Guidelines\n\n### Customer Service Scenarios\n\n**Product Inquiries:**\n\n- Use `get-all-products` for browsing\n- Use `get-product-by-id` for specific product details\n- Use `get-product-variants` for size/color availability\n\n**Shopping Assistance:**\n\n- Use `get-cart-by-id` or `get-active-cart` to check current cart\n- Use `add-item-to-cart` when customer wants to purchase\n- Use `remove-item-from-cart` for removals\n\n**Order Support:**\n\n- Use `get-order-by-id` for order status\n- Use `get-shipment-tracking` for delivery updates\n- Use `cancel-order` for cancellation requests\n\n**Account Management:**\n\n- Use `get-user-by-id` for customer profile\n- Use `add-user-address` for new addresses\n- Use `add-user-payment-method` for payment options\n\n### Administrative Tasks\n\n**Inventory Management:**\n\n- Use `create-product` for new items\n- Use `update-product` for price/inventory changes\n- Use `delete-product` for discontinued items\n\n**Order Processing:**\n\n- Use `update-order-status` for workflow updates\n- Use `create-shipment` when orders ship\n- Use `add-tracking-event` for delivery updates\n\n**Customer Management:**\n\n- Use `get-all-users` for customer lists\n- Use `update-user` for profile changes\n- Use `delete-user` for account removal\n\n## Response Guidelines\n\n1. **Always be helpful and professional**\n2. **Provide clear, actionable information**\n3. **Use appropriate tools based on customer needs**\n4. **Explain what you're doing when using tools**\n5. **Handle errors gracefully and suggest alternatives**\n6. **Maintain customer privacy and data security**\n7. **Escalate complex issues to human support when needed**\n\n## Error Handling\n\n- If a tool fails, explain what went wrong and suggest alternatives\n- Always verify data before making changes\n- Confirm destructive actions (deletions, cancellations) with customers\n- Provide clear error messages and next steps\n\nRemember: You are the customer's trusted shopping assistant. Use these tools thoughtfully to provide the best possible e-commerce experience.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [220, 0],
+      "id": "ai-agent",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [-120, 0],
+      "id": "chat-trigger",
+      "name": "When chat message received",
+      "webhookId": "b8fb2e95-7a4f-46b8-9ad5-51f93450ba3e"
+    },
+    {
+      "parameters": {
+        "databaseName": "ecomm_mock",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [40, 300],
+      "id": "mongodb-memory",
+      "name": "MongoDB Chat Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "nGtpfQcyXl5JoNag",
+          "name": "ecomm_mock"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -48,7 +109,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to retrieve specific product details`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to retrieve specific product details`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -68,7 +129,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -103,7 +164,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to update`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to update`, 'string') }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -138,7 +199,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to delete`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to delete`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -160,7 +221,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to get variants for`, 'string') }}/variants",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to get variants for`, 'string') }}/variants",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -180,7 +241,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -217,7 +278,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to retrieve specific user details`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to retrieve specific user details`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -237,7 +298,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -272,7 +333,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to update`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to update`, 'string') }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -307,7 +368,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to delete`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to delete`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -329,7 +390,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add address for`, 'string') }}/addresses",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add address for`, 'string') }}/addresses",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -364,7 +425,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add payment method for`, 'string') }}/payment-methods",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add payment method for`, 'string') }}/payment-methods",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -399,13 +460,33 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 620],
+      "id": "get-all-carts",
+      "name": "Get All Carts"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
             {
               "name": "user_id",
-              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to filter by`, 'string') }}"
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to filter carts by (must be valid MongoDB ObjectId)`, 'string') }}"
             },
             {
               "name": "page",
@@ -430,13 +511,13 @@
       },
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
-      "position": [320, 620],
-      "id": "get-all-carts",
-      "name": "Get All Carts"
+      "position": [480, 620],
+      "id": "get-carts-by-user",
+      "name": "Get Carts by User ID"
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to retrieve specific cart details`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to retrieve specific cart details`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -450,13 +531,13 @@
       },
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
-      "position": [480, 620],
+      "position": [640, 620],
       "id": "get-cart-by-id",
       "name": "Get Cart by ID"
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -491,7 +572,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to update`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to update`, 'string') }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -526,7 +607,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to delete`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to delete`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -548,7 +629,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to add item to`, 'string') }}/items",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to add item to`, 'string') }}/items",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -583,7 +664,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to remove item from`, 'string') }}/items/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Variant ID of item to remove from cart`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to remove item from`, 'string') }}/items/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Variant ID of item to remove from cart`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -605,7 +686,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -646,7 +727,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to retrieve specific order details`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to retrieve specific order details`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -666,7 +747,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -701,7 +782,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to update`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to update`, 'string') }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -736,7 +817,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to delete`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to delete`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -758,7 +839,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to update status for`, 'string') }}/status",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to update status for`, 'string') }}/status",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -793,7 +874,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to cancel`, 'string') }}/cancel",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to cancel`, 'string') }}/cancel",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -828,7 +909,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -869,7 +950,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to retrieve specific checkout details`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to retrieve specific checkout details`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -889,7 +970,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -924,7 +1005,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to update`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to update`, 'string') }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -959,7 +1040,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to delete`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to delete`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -981,7 +1062,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to complete`, 'string') }}/complete",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to complete`, 'string') }}/complete",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1003,7 +1084,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -1044,7 +1125,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to retrieve specific shipment details`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to retrieve specific shipment details`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1064,7 +1145,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -1099,7 +1180,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to update`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to update`, 'string') }}",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -1134,7 +1215,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to delete`, 'string') }}",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to delete`, 'string') }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1156,7 +1237,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to get tracking for`, 'string') }}/tracking",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to get tracking for`, 'string') }}/tracking",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1176,7 +1257,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to add tracking event for`, 'string') }}/events",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to add tracking event for`, 'string') }}/events",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -1211,7 +1292,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/health",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/health",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1231,7 +1312,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/user/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to get active cart for`, 'string') }}/active",
+        "url": "https://ecomm-mock-backend-er5a3qk6m-omkar861856s-projects.vercel.app/api/carts/user/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to get active cart for`, 'string') }}/active",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -1251,6 +1332,39 @@
     }
   ],
   "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Get All Products": {
       "ai_tool": [
         [
@@ -1395,6 +1509,17 @@
       ]
     },
     "Get All Carts": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Carts by User ID": {
       "ai_tool": [
         [
           {
@@ -1714,16 +1839,7 @@
       ]
     }
   },
-  "active": false,
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "staticData": null,
-  "tags": [],
-  "triggerCount": 0,
-  "createdAt": "2024-01-01T00:00:00.000Z",
-  "updatedAt": "2024-01-01T00:00:00.000Z",
-  "id": "ecommerce-api-tools",
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a3f19ff808b582c00214774cb08e8015c94d74fee84dcb5c5570650fa3fd2bb0"
