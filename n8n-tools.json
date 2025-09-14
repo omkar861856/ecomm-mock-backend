@@ -1,0 +1,1362 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "category",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product category to filter by (e.g., electronics, clothing, books)`, 'string') }}"
+            },
+            {
+              "name": "brand",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Brand name to filter products by (e.g., Apple, Nike, Samsung)`, 'string') }}"
+            },
+            {
+              "name": "search",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Search term to find products by name or description`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', `Number of products per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 340],
+      "id": "get-all-products",
+      "name": "Get All Products"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to retrieve specific product details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 340],
+      "id": "get-product-by-id",
+      "name": "Get Product by ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "productData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 340],
+      "id": "create-product",
+      "name": "Create Product"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "productData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Product data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 340],
+      "id": "update-product",
+      "name": "Update Product"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to delete`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [960, 340],
+      "id": "delete-product",
+      "name": "Delete Product"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Product ID to get variants for`, 'string') }}/variants",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 340],
+      "id": "get-product-variants",
+      "name": "Get Product Variants"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "loyalty_tier",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Loyalty tier to filter users by (bronze, silver, gold, platinum)`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Number of users per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 480],
+      "id": "get-all-users",
+      "name": "Get All Users"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to retrieve specific user details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 480],
+      "id": "get-user-by-id",
+      "name": "Get User by ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "userData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 480],
+      "id": "create-user",
+      "name": "Create User"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "userData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `User data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 480],
+      "id": "update-user",
+      "name": "Update User"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to delete`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [960, 480],
+      "id": "delete-user",
+      "name": "Delete User"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add address for`, 'string') }}/addresses",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "addressData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Address data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 480],
+      "id": "add-user-address",
+      "name": "Add User Address"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to add payment method for`, 'string') }}/payment-methods",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "paymentMethodData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Payment method data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 480],
+      "id": "add-user-payment-method",
+      "name": "Add User Payment Method"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to filter by`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Number of items per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 620],
+      "id": "get-all-carts",
+      "name": "Get All Carts"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to retrieve specific cart details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 620],
+      "id": "get-cart-by-id",
+      "name": "Get Cart by ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cartData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 620],
+      "id": "create-cart",
+      "name": "Create Cart"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cartData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Cart data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 620],
+      "id": "update-cart",
+      "name": "Update Cart"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to delete`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [960, 620],
+      "id": "delete-cart",
+      "name": "Delete Cart"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to add item to`, 'string') }}/items",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "itemData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Item data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 620],
+      "id": "add-item-to-cart",
+      "name": "Add Item to Cart"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Cart ID to remove item from`, 'string') }}/items/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Variant ID of item to remove from cart`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 620],
+      "id": "remove-item-from-cart",
+      "name": "Remove Item from Cart"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to filter by`, 'string') }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Order status to filter by (pending, confirmed, shipped, delivered, cancelled)`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Number of items per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 760],
+      "id": "get-all-orders",
+      "name": "Get All Orders"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to retrieve specific order details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 760],
+      "id": "get-order-by-id",
+      "name": "Get Order by ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "orderData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 760],
+      "id": "create-order",
+      "name": "Create Order"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "orderData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Order data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 760],
+      "id": "update-order",
+      "name": "Update Order"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to delete`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [960, 760],
+      "id": "delete-order",
+      "name": "Delete Order"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to update status for`, 'string') }}/status",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "statusData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Status update data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PATCH"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 760],
+      "id": "update-order-status",
+      "name": "Update Order Status"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to cancel`, 'string') }}/cancel",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cancelData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Cancellation data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 760],
+      "id": "cancel-order",
+      "name": "Cancel Order"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `User ID to filter by`, 'string') }}"
+            },
+            {
+              "name": "cart_id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Cart ID to filter checkouts by`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Number of items per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 900],
+      "id": "get-all-checkouts",
+      "name": "Get All Checkouts"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to retrieve specific checkout details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 900],
+      "id": "get-checkout-by-id",
+      "name": "Get Checkout by ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "checkoutData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 900],
+      "id": "create-checkout",
+      "name": "Create Checkout"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "checkoutData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Checkout data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 900],
+      "id": "update-checkout",
+      "name": "Update Checkout"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to delete`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [960, 900],
+      "id": "delete-checkout",
+      "name": "Delete Checkout"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Checkout ID to complete`, 'string') }}/complete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 900],
+      "id": "complete-checkout",
+      "name": "Complete Checkout"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "order_id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Order ID to filter shipments by`, 'string') }}"
+            },
+            {
+              "name": "carrier",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Carrier name to filter shipments by (UPS, FedEx, DHL, etc.)`, 'string') }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Page number for pagination (default: 1)`, 'string') }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Number of items per page (default: 10, max: 100)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 1040],
+      "id": "get-all-shipments",
+      "name": "Get All Shipments"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to retrieve specific shipment details`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [480, 1040],
+      "id": "get-shipment-by-id",
+      "name": "Get Shipment by ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "shipmentData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [640, 1040],
+      "id": "create-shipment",
+      "name": "Create Shipment"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to update`, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "shipmentData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Shipment data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "PUT"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [800, 1040],
+      "id": "update-shipment",
+      "name": "Update Shipment"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to delete`, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "DELETE"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [960, 1040],
+      "id": "delete-shipment",
+      "name": "Delete Shipment"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to get tracking for`, 'string') }}/tracking",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1120, 1040],
+      "id": "get-shipment-tracking",
+      "name": "Get Shipment Tracking"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Shipment ID to add tracking event for`, 'string') }}/events",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "eventData",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Tracking event data as JSON string (stringify the object before passing)`, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "method": "POST"
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [1280, 1040],
+      "id": "add-tracking-event",
+      "name": "Add Tracking Event"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/health",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [320, 1180],
+      "id": "health-check",
+      "name": "Health Check"
+    }
+  ],
+  "connections": {
+    "Get All Products": {
+      "ai_tool": [[]]
+    },
+    "Get Product by ID": {
+      "ai_tool": [[]]
+    },
+    "Create Product": {
+      "ai_tool": [[]]
+    },
+    "Update Product": {
+      "ai_tool": [[]]
+    },
+    "Delete Product": {
+      "ai_tool": [[]]
+    },
+    "Get Product Variants": {
+      "ai_tool": [[]]
+    },
+    "Get All Users": {
+      "ai_tool": [[]]
+    },
+    "Get User by ID": {
+      "ai_tool": [[]]
+    },
+    "Create User": {
+      "ai_tool": [[]]
+    },
+    "Update User": {
+      "ai_tool": [[]]
+    },
+    "Delete User": {
+      "ai_tool": [[]]
+    },
+    "Add User Address": {
+      "ai_tool": [[]]
+    },
+    "Add User Payment Method": {
+      "ai_tool": [[]]
+    },
+    "Get All Carts": {
+      "ai_tool": [[]]
+    },
+    "Get Cart by ID": {
+      "ai_tool": [[]]
+    },
+    "Create Cart": {
+      "ai_tool": [[]]
+    },
+    "Update Cart": {
+      "ai_tool": [[]]
+    },
+    "Delete Cart": {
+      "ai_tool": [[]]
+    },
+    "Add Item to Cart": {
+      "ai_tool": [[]]
+    },
+    "Remove Item from Cart": {
+      "ai_tool": [[]]
+    },
+    "Get All Orders": {
+      "ai_tool": [[]]
+    },
+    "Get Order by ID": {
+      "ai_tool": [[]]
+    },
+    "Create Order": {
+      "ai_tool": [[]]
+    },
+    "Update Order": {
+      "ai_tool": [[]]
+    },
+    "Delete Order": {
+      "ai_tool": [[]]
+    },
+    "Update Order Status": {
+      "ai_tool": [[]]
+    },
+    "Cancel Order": {
+      "ai_tool": [[]]
+    },
+    "Get All Checkouts": {
+      "ai_tool": [[]]
+    },
+    "Get Checkout by ID": {
+      "ai_tool": [[]]
+    },
+    "Create Checkout": {
+      "ai_tool": [[]]
+    },
+    "Update Checkout": {
+      "ai_tool": [[]]
+    },
+    "Delete Checkout": {
+      "ai_tool": [[]]
+    },
+    "Complete Checkout": {
+      "ai_tool": [[]]
+    },
+    "Get All Shipments": {
+      "ai_tool": [[]]
+    },
+    "Get Shipment by ID": {
+      "ai_tool": [[]]
+    },
+    "Create Shipment": {
+      "ai_tool": [[]]
+    },
+    "Update Shipment": {
+      "ai_tool": [[]]
+    },
+    "Delete Shipment": {
+      "ai_tool": [[]]
+    },
+    "Get Shipment Tracking": {
+      "ai_tool": [[]]
+    },
+    "Add Tracking Event": {
+      "ai_tool": [[]]
+    },
+    "Health Check": {
+      "ai_tool": [[]]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a3f19ff808b582c00214774cb08e8015c94d74fee84dcb5c5570650fa3fd2bb0"
+  }
+}
