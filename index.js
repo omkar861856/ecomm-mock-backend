@@ -9,6 +9,7 @@ require("dotenv").config();
 
 // Import database connection
 const connectDB = require("./config/database");
+const mongoose = require("mongoose");
 
 // Import routes
 const productRoutes = require("./routes/productRoutes");

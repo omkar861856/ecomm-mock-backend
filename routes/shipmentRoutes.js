@@ -4,11 +4,14 @@ const {
   createShipment,
   getAllShipments,
   getShipmentById,
+  getShipmentByTrackingNumber,
   updateShipment,
-  deleteShipment,
   addTrackingEvent,
-  getShipmentTracking,
-} = require("../controllers/shipmentController");
+  markAsDelivered,
+  getShipmentsByStatus,
+  getShipmentsByCarrier,
+  getShipmentStats,
+} = require("../controllers/mongodb/shipmentController");
 
 /**
  * @swagger
@@ -227,7 +230,7 @@ router.post("/", createShipment);
  */
 router.get("/:id", getShipmentById);
 router.put("/:id", updateShipment);
-router.delete("/:id", deleteShipment);
+// router.delete("/:id", deleteShipment); // Soft delete implemented via status update
 
 /**
  * @swagger
@@ -257,7 +260,7 @@ router.delete("/:id", deleteShipment);
  *       404:
  *         description: Shipment not found
  */
-router.get("/:id/tracking", getShipmentTracking);
+// router.get("/:id/tracking", getShipmentTracking); // Use getShipmentById instead
 
 /**
  * @swagger

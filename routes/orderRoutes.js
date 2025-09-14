@@ -4,11 +4,15 @@ const {
   createOrder,
   getAllOrders,
   getOrderById,
+  getOrderByNumber,
   updateOrder,
-  deleteOrder,
   updateOrderStatus,
   cancelOrder,
-} = require("../controllers/orderController");
+  addTrackingNumber,
+  markAsDelivered,
+  processRefund,
+  getOrderStats,
+} = require("../controllers/mongodb/orderController");
 
 /**
  * @swagger
@@ -332,7 +336,7 @@ router.post("/", createOrder);
  */
 router.get("/:id", getOrderById);
 router.put("/:id", updateOrder);
-router.delete("/:id", deleteOrder);
+// router.delete("/:id", deleteOrder); // Soft delete implemented via status update
 
 /**
  * @swagger
@@ -403,5 +407,124 @@ router.patch("/:id/status", updateOrderStatus);
  *         description: Order cannot be cancelled in current status
  */
 router.post("/:id/cancel", cancelOrder);
+
+/**
+ * @swagger
+ * /api/orders/number/{orderNumber}:
+ *   get:
+ *     summary: Get order by order number
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: orderNumber
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order number
+ *     responses:
+ *       200:
+ *         description: Order details
+ *       404:
+ *         description: Order not found
+ */
+router.get("/number/:orderNumber", getOrderByNumber);
+
+/**
+ * @swagger
+ * /api/orders/{id}/tracking:
+ *   post:
+ *     summary: Add tracking number to order
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               trackingNumber:
+ *                 type: string
+ *               estimatedDelivery:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       200:
+ *         description: Tracking number added successfully
+ *       404:
+ *         description: Order not found
+ */
+router.post("/:id/tracking", addTrackingNumber);
+
+/**
+ * @swagger
+ * /api/orders/{id}/delivered:
+ *   post:
+ *     summary: Mark order as delivered
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     responses:
+ *       200:
+ *         description: Order marked as delivered successfully
+ *       404:
+ *         description: Order not found
+ */
+router.post("/:id/delivered", markAsDelivered);
+
+/**
+ * @swagger
+ * /api/orders/{id}/refund:
+ *   post:
+ *     summary: Process refund for order
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Order ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refundAmount:
+ *                 type: number
+ *               refundReason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Refund processed successfully
+ *       404:
+ *         description: Order not found
+ */
+router.post("/:id/refund", processRefund);
+
+/**
+ * @swagger
+ * /api/orders/stats:
+ *   get:
+ *     summary: Get order statistics
+ *     tags: [Orders]
+ *     responses:
+ *       200:
+ *         description: Order statistics
+ */
+router.get("/stats", getOrderStats);
 
 module.exports = router;

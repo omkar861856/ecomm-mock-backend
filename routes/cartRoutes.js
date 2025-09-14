@@ -4,11 +4,15 @@ const {
   createCart,
   getAllCarts,
   getCartById,
+  getActiveCart,
   updateCart,
   deleteCart,
   addItemToCart,
   removeItemFromCart,
-} = require("../controllers/cartController");
+  clearCart,
+  applyDiscount,
+  getCartStats,
+} = require("../controllers/mongodb/cartController");
 
 /**
  * @swagger
@@ -260,7 +264,7 @@ router.post("/:id/items", addItemToCart);
 
 /**
  * @swagger
- * /api/carts/{id}/items/{variant_id}:
+ * /api/carts/{id}/items/{productId}/{variantId}:
  *   delete:
  *     summary: Remove item from cart
  *     tags: [Carts]
@@ -272,8 +276,14 @@ router.post("/:id/items", addItemToCart);
  *           type: string
  *         description: Cart ID
  *       - in: path
- *         name: variant_id
+ *         name: productId
  *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *       - in: path
+ *         name: variantId
+ *         required: false
  *         schema:
  *           type: string
  *         description: Product variant ID
@@ -283,6 +293,92 @@ router.post("/:id/items", addItemToCart);
  *       404:
  *         description: Cart not found
  */
-router.delete("/:id/items/:variant_id", removeItemFromCart);
+router.delete("/:id/items/:productId/:variantId", removeItemFromCart);
+
+/**
+ * @swagger
+ * /api/carts/{id}/clear:
+ *   post:
+ *     summary: Clear cart
+ *     tags: [Carts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Cart ID
+ *     responses:
+ *       200:
+ *         description: Cart cleared successfully
+ *       404:
+ *         description: Cart not found
+ */
+router.post("/:id/clear", clearCart);
+
+/**
+ * @swagger
+ * /api/carts/{id}/discount:
+ *   post:
+ *     summary: Apply discount to cart
+ *     tags: [Carts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Cart ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               discountCode:
+ *                 type: string
+ *               discountAmount:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Discount applied successfully
+ *       404:
+ *         description: Cart not found
+ */
+router.post("/:id/discount", applyDiscount);
+
+/**
+ * @swagger
+ * /api/carts/user/{userId}/active:
+ *   get:
+ *     summary: Get active cart for user
+ *     tags: [Carts]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: Active cart details
+ *       404:
+ *         description: No active cart found
+ */
+router.get("/user/:userId/active", getActiveCart);
+
+/**
+ * @swagger
+ * /api/carts/stats:
+ *   get:
+ *     summary: Get cart statistics
+ *     tags: [Carts]
+ *     responses:
+ *       200:
+ *         description: Cart statistics
+ */
+router.get("/stats", getCartStats);
 
 module.exports = router;

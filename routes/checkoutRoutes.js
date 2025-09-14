@@ -4,10 +4,14 @@ const {
   createCheckout,
   getAllCheckouts,
   getCheckoutById,
+  getCheckoutByCheckoutId,
   updateCheckout,
-  deleteCheckout,
   completeCheckout,
-} = require("../controllers/checkoutController");
+  failCheckout,
+  cancelCheckout,
+  cleanupExpiredCheckouts,
+  getCheckoutStats,
+} = require("../controllers/mongodb/checkoutController");
 
 /**
  * @swagger
@@ -236,7 +240,7 @@ router.post("/", createCheckout);
  */
 router.get("/:id", getCheckoutById);
 router.put("/:id", updateCheckout);
-router.delete("/:id", deleteCheckout);
+// router.delete("/:id", deleteCheckout); // Soft delete implemented via status update
 
 /**
  * @swagger
