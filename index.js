@@ -5,6 +5,10 @@ const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+require("dotenv").config();
+
+// Import database connection
+const connectDB = require("./config/database");
 
 // Import routes
 const productRoutes = require("./routes/productRoutes");
@@ -16,17 +20,39 @@ const shipmentRoutes = require("./routes/shipmentRoutes");
 
 const app = express();
 
-// Rate limiting - more lenient for Vercel
+// Connect to MongoDB
+connectDB();
+
+// Rate limiting - configurable via environment variables
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // Increased limit for Vercel
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes default
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 1000, // 1000 requests default
+  skipSuccessfulRequests:
+    process.env.RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS === "true",
   message: "Too many requests from this IP, please try again later.",
 });
 
-// Middleware
-app.use(helmet());
-app.use(cors());
-app.use(morgan("combined"));
+// Middleware - configurable via environment variables
+app.use(
+  helmet({
+    enabled: process.env.HELMET_ENABLED !== "false",
+  })
+);
+
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "*",
+    credentials: process.env.CORS_CREDENTIALS === "true",
+    methods: process.env.CORS_METHODS
+      ? process.env.CORS_METHODS.split(",")
+      : ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: process.env.CORS_ALLOWED_HEADERS
+      ? process.env.CORS_ALLOWED_HEADERS.split(",")
+      : ["Content-Type", "Authorization", "X-API-Key"],
+  })
+);
+
+app.use(morgan(process.env.MORGAN_FORMAT || "combined"));
 app.use(limiter);
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -36,23 +62,32 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "E-commerce API",
-      version: "1.0.0",
+      title: process.env.API_TITLE || "E-commerce API",
+      version: process.env.API_VERSION || "1.0.0",
       description:
+        process.env.API_DESCRIPTION ||
         "A comprehensive e-commerce API with CRUD operations for products, users, orders, carts, checkouts, and shipments",
       contact: {
-        name: "API Support",
-        email: "support@example.com",
+        name: process.env.API_CONTACT_NAME || "API Support",
+        email: process.env.API_CONTACT_EMAIL || "support@example.com",
       },
       license: {
-        name: "MIT",
-        url: "https://opensource.org/licenses/MIT",
+        name: process.env.API_LICENSE_NAME || "MIT",
+        url:
+          process.env.API_LICENSE_URL || "https://opensource.org/licenses/MIT",
       },
     },
     servers: [
       {
-        url: "https://your-app-name.vercel.app",
-        description: "Production server",
+        url:
+          process.env.API_BASE_URL ||
+          (process.env.NODE_ENV === "production"
+            ? "https://your-app-name.vercel.app"
+            : "http://localhost:3000"),
+        description:
+          process.env.NODE_ENV === "production"
+            ? "Production server"
+            : "Development server",
       },
     ],
     components: {
@@ -191,25 +226,35 @@ const swaggerOptions = {
 
 const specs = swaggerJsdoc(swaggerOptions);
 
-// Swagger UI
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs, {
-    explorer: true,
-    customCss: ".swagger-ui .topbar { display: none }",
-    customSiteTitle: "E-commerce API Documentation",
-  })
-);
+// Swagger UI - only enable in development or when explicitly enabled
+if (
+  process.env.NODE_ENV !== "production" ||
+  process.env.ENABLE_SWAGGER === "true"
+) {
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs, {
+      explorer: true,
+      customCss: ".swagger-ui .topbar { display: none }",
+      customSiteTitle: process.env.API_TITLE || "E-commerce API Documentation",
+    })
+  );
+  console.log(`📚 Swagger documentation available at /api-docs`);
+}
 
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({
     success: true,
-    message: "API is running",
+    message: process.env.API_HEALTH_MESSAGE || "API is running",
     timestamp: new Date().toISOString(),
-    version: "1.0.0",
+    version: process.env.API_VERSION || "1.0.0",
     environment: process.env.NODE_ENV || "production",
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
   });
 });
 

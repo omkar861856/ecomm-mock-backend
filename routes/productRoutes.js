@@ -6,8 +6,10 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
-  getProductVariants,
-} = require("../controllers/productController");
+  getProductsByCategory,
+  searchProducts,
+  getProductStats,
+} = require("../controllers/mongodb/productController");
 
 /**
  * @swagger
@@ -433,6 +435,6 @@ router.delete("/:id", deleteProduct);
  *       404:
  *         description: Product not found
  */
-router.get("/:id/variants", getProductVariants);
+// router.get("/:id/variants", getProductVariants); // Not implemented in MongoDB controller
 
 module.exports = router;

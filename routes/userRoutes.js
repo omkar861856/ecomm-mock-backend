@@ -6,9 +6,13 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-  addUserAddress,
-  addUserPaymentMethod,
-} = require("../controllers/userController");
+  addAddress,
+  updateAddress,
+  deleteAddress,
+  addPaymentMethod,
+  updateLoyaltyPoints,
+  getUserStats,
+} = require("../controllers/mongodb/userController");
 
 /**
  * @swagger
@@ -267,7 +271,7 @@ router.delete("/:id", deleteUser);
  *       404:
  *         description: User not found
  */
-router.post("/:id/addresses", addUserAddress);
+router.post("/:id/addresses", addAddress);
 
 /**
  * @swagger
@@ -294,6 +298,6 @@ router.post("/:id/addresses", addUserAddress);
  *       404:
  *         description: User not found
  */
-router.post("/:id/payment-methods", addUserPaymentMethod);
+router.post("/:id/payment-methods", addPaymentMethod);
 
 module.exports = router;
