@@ -5,6 +5,11 @@ const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+require("dotenv").config();
+
+// Import database connection
+const connectDB = require("./config/database");
+const mongoose = require("mongoose");
 
 // Import routes
 const productRoutes = require("./routes/productRoutes");
@@ -15,6 +20,10 @@ const checkoutRoutes = require("./routes/checkoutRoutes");
 const shipmentRoutes = require("./routes/shipmentRoutes");
 
 const app = express();
+
+// Connect to MongoDB
+connectDB();
+
 const PORT = process.env.PORT || 3000;
 
 // Rate limiting
@@ -210,6 +219,11 @@ app.get("/health", (req, res) => {
     message: "API is running",
     timestamp: new Date().toISOString(),
     version: "1.0.0",
+    environment: process.env.NODE_ENV || "production",
+    database:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
   });
 });
 

@@ -1,0 +1,403 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://localhost:3000/health",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-1000, 100],
+      "id": "health-check",
+      "name": "Health Check"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-1000, 200],
+      "id": "root-endpoint",
+      "name": "Root Endpoint"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-800, 100],
+      "id": "get-all-products",
+      "name": "Get All Products"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products/{{ $fromAI('Product ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-800, 200],
+      "id": "get-product-by-id",
+      "name": "Get Product By ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products?category={{ $fromAI('Category', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-800, 300],
+      "id": "get-products-by-category",
+      "name": "Get Products By Category"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products?search={{ $fromAI('Search Term', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-800, 400],
+      "id": "search-products",
+      "name": "Search Products"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/products/stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-800, 500],
+      "id": "get-product-stats",
+      "name": "Get Product Stats"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-600, 100],
+      "id": "get-all-users",
+      "name": "Get All Users"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/{{ $fromAI('User ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-600, 200],
+      "id": "get-user-by-id",
+      "name": "Get User By ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/users/stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-600, 300],
+      "id": "get-user-stats",
+      "name": "Get User Stats"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-400, 100],
+      "id": "get-all-carts",
+      "name": "Get All Carts"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/{{ $fromAI('Cart ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-400, 200],
+      "id": "get-cart-by-id",
+      "name": "Get Cart By ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/user/{{ $fromAI('User ID', ``, 'string') }}/active",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-400, 300],
+      "id": "get-active-cart",
+      "name": "Get Active Cart"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/carts/stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-400, 400],
+      "id": "get-cart-stats",
+      "name": "Get Cart Stats"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-200, 100],
+      "id": "get-all-orders",
+      "name": "Get All Orders"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/{{ $fromAI('Order ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-200, 200],
+      "id": "get-order-by-id",
+      "name": "Get Order By ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/number/{{ $fromAI('Order Number', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-200, 300],
+      "id": "get-order-by-number",
+      "name": "Get Order By Number"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/orders/stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [-200, 400],
+      "id": "get-order-stats",
+      "name": "Get Order Stats"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [0, 100],
+      "id": "get-all-checkouts",
+      "name": "Get All Checkouts"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/{{ $fromAI('Checkout ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [0, 200],
+      "id": "get-checkout-by-id",
+      "name": "Get Checkout By ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/{{ $fromAI('Checkout ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [0, 300],
+      "id": "get-checkout-by-checkout-id",
+      "name": "Get Checkout By Checkout ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkouts/stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [0, 400],
+      "id": "get-checkout-stats",
+      "name": "Get Checkout Stats"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [200, 100],
+      "id": "get-all-shipments",
+      "name": "Get All Shipments"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/{{ $fromAI('Shipment ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [200, 200],
+      "id": "get-shipment-by-id",
+      "name": "Get Shipment By ID"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/tracking/{{ $fromAI('Tracking Number', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [200, 300],
+      "id": "get-shipment-by-tracking",
+      "name": "Get Shipment By Tracking"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments?status={{ $fromAI('Status', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [200, 400],
+      "id": "get-shipments-by-status",
+      "name": "Get Shipments By Status"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments?carrier={{ $fromAI('Carrier', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [200, 500],
+      "id": "get-shipments-by-carrier",
+      "name": "Get Shipments By Carrier"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/shipments/stats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [200, 600],
+      "id": "get-shipment-stats",
+      "name": "Get Shipment Stats"
+    }
+  ],
+  "connections": {
+    "Health Check": {
+      "ai_tool": [[]]
+    },
+    "Root Endpoint": {
+      "ai_tool": [[]]
+    },
+    "Get All Products": {
+      "ai_tool": [[]]
+    },
+    "Get Product By ID": {
+      "ai_tool": [[]]
+    },
+    "Get Products By Category": {
+      "ai_tool": [[]]
+    },
+    "Search Products": {
+      "ai_tool": [[]]
+    },
+    "Get Product Stats": {
+      "ai_tool": [[]]
+    },
+    "Get All Users": {
+      "ai_tool": [[]]
+    },
+    "Get User By ID": {
+      "ai_tool": [[]]
+    },
+    "Get User Stats": {
+      "ai_tool": [[]]
+    },
+    "Get All Carts": {
+      "ai_tool": [[]]
+    },
+    "Get Cart By ID": {
+      "ai_tool": [[]]
+    },
+    "Get Active Cart": {
+      "ai_tool": [[]]
+    },
+    "Get Cart Stats": {
+      "ai_tool": [[]]
+    },
+    "Get All Orders": {
+      "ai_tool": [[]]
+    },
+    "Get Order By ID": {
+      "ai_tool": [[]]
+    },
+    "Get Order By Number": {
+      "ai_tool": [[]]
+    },
+    "Get Order Stats": {
+      "ai_tool": [[]]
+    },
+    "Get All Checkouts": {
+      "ai_tool": [[]]
+    },
+    "Get Checkout By ID": {
+      "ai_tool": [[]]
+    },
+    "Get Checkout By Checkout ID": {
+      "ai_tool": [[]]
+    },
+    "Get Checkout Stats": {
+      "ai_tool": [[]]
+    },
+    "Get All Shipments": {
+      "ai_tool": [[]]
+    },
+    "Get Shipment By ID": {
+      "ai_tool": [[]]
+    },
+    "Get Shipment By Tracking": {
+      "ai_tool": [[]]
+    },
+    "Get Shipments By Status": {
+      "ai_tool": [[]]
+    },
+    "Get Shipments By Carrier": {
+      "ai_tool": [[]]
+    },
+    "Get Shipment Stats": {
+      "ai_tool": [[]]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a3f19ff808b582c00214774cb08e8015c94d74fee84dcb5c5570650fa3fd2bb0"
+  }
+}

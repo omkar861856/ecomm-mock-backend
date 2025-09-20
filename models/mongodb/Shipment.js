@@ -191,17 +191,15 @@ const shipmentSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Indexes (shipmentId and trackingNumber already have unique indexes from schema definition)
 shipmentSchema.index({ orderId: 1 });
-shipmentSchema.index({ shipmentId: 1 });
-shipmentSchema.index({ trackingNumber: 1 });
 shipmentSchema.index({ status: 1 });
 shipmentSchema.index({ carrier: 1 });
 shipmentSchema.index({ createdAt: -1 });
 
 // Virtual for current status
 shipmentSchema.virtual("currentStatus").get(function () {
-  return this.trackingEvents.length > 0
+  return this.trackingEvents && this.trackingEvents.length > 0
     ? this.trackingEvents[this.trackingEvents.length - 1].status
     : this.status;
 });

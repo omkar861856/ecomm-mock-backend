@@ -162,21 +162,24 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
-userSchema.index({ email: 1 });
+// Indexes (email already has unique index from schema definition)
 userSchema.index({ phone: 1 });
 userSchema.index({ loyaltyTier: 1 });
 userSchema.index({ createdAt: -1 });
 
 // Virtual for default address
 userSchema.virtual("defaultAddress").get(function () {
-  return this.addresses.find((addr) => addr.isDefault) || this.addresses[0];
+  return (
+    (this.addresses && this.addresses.find((addr) => addr.isDefault)) ||
+    (this.addresses && this.addresses[0])
+  );
 });
 
 // Virtual for default payment method
 userSchema.virtual("defaultPaymentMethod").get(function () {
   return (
-    this.paymentMethods.find((pm) => pm.isDefault) || this.paymentMethods[0]
+    (this.paymentMethods && this.paymentMethods.find((pm) => pm.isDefault)) ||
+    (this.paymentMethods && this.paymentMethods[0])
   );
 });
 

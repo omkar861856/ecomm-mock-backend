@@ -168,9 +168,8 @@ const checkoutSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Indexes (checkoutId already has unique index from schema definition)
 checkoutSchema.index({ userId: 1 });
-checkoutSchema.index({ checkoutId: 1 });
 checkoutSchema.index({ cartId: 1 });
 checkoutSchema.index({ status: 1 });
 checkoutSchema.index({ expiresAt: 1 });

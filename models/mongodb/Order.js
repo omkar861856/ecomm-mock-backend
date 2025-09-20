@@ -174,16 +174,15 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Indexes (orderNumber already has unique index from schema definition)
 orderSchema.index({ userId: 1 });
-orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ createdAt: -1 });
 orderSchema.index({ trackingNumber: 1 });
 
 // Virtual for order status
 orderSchema.virtual("currentStatus").get(function () {
-  return this.statusHistory.length > 0
+  return this.statusHistory && this.statusHistory.length > 0
     ? this.statusHistory[this.statusHistory.length - 1].status
     : this.status;
 });
