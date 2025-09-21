@@ -236,10 +236,50 @@ const cancelOrder = (req, res) => {
   }
 };
 
+// Get all orders by user ID
+const getOrdersByUserId = (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { status, page = 1, limit = 10 } = req.query;
+    let orders = getAllEntities("orders");
+
+    // Filter by user_id
+    orders = orders.filter((order) => order.user_id === user_id);
+
+    // Apply additional filters
+    if (status) {
+      orders = orders.filter((order) => order.status === status);
+    }
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedOrders = orders.slice(startIndex, endIndex);
+
+    res.json({
+      success: true,
+      data: paginatedOrders,
+      pagination: {
+        current_page: parseInt(page),
+        total_pages: Math.ceil(orders.length / limit),
+        total_items: orders.length,
+        items_per_page: parseInt(limit),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching orders by user ID",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
+  getOrdersByUserId,
   updateOrder,
   deleteOrder,
   updateOrderStatus,

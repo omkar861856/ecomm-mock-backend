@@ -2,7 +2,7 @@
   "nodes": [
     {
       "parameters": {
-        "url": "http://localhost:3000/health",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/health",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -13,7 +13,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -24,7 +24,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/products",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -35,7 +35,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products/{{ $fromAI('Product ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/products/{{ $fromAI('Product ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -46,7 +46,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products?category={{ $fromAI('Category', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/products?category={{ $fromAI('Category', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -57,7 +57,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products?search={{ $fromAI('Search Term', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/products?search={{ $fromAI('Search Term', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -68,7 +68,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/products/stats",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/products/stats",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -79,7 +79,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/users",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -90,7 +90,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/{{ $fromAI('User ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/users/{{ $fromAI('User ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -101,7 +101,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/users/stats",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/users/stats",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -112,7 +112,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/carts",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -123,7 +123,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/{{ $fromAI('Cart ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/carts/{{ $fromAI('Cart ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -134,7 +134,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/user/{{ $fromAI('User ID', ``, 'string') }}/active",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/carts/user/{{ $fromAI('User ID', ``, 'string') }}/active",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -145,7 +145,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/carts/stats",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/carts/stats",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -156,7 +156,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/orders",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -167,7 +167,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/{{ $fromAI('Order ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/orders/{{ $fromAI('Order ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -178,7 +178,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/number/{{ $fromAI('Order Number', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/orders/number/{{ $fromAI('Order Number', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -189,7 +189,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/orders/stats",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/orders/stats",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -200,7 +200,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/checkouts",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -211,7 +211,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/{{ $fromAI('Checkout ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/checkouts/{{ $fromAI('Checkout ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -222,7 +222,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/{{ $fromAI('Checkout ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/checkouts/{{ $fromAI('Checkout ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -233,7 +233,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/checkouts/stats",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/checkouts/stats",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -244,7 +244,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -255,7 +255,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/{{ $fromAI('Shipment ID', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments/{{ $fromAI('Shipment ID', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -266,7 +266,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/tracking/{{ $fromAI('Tracking Number', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments/tracking/{{ $fromAI('Tracking Number', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -277,7 +277,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments?status={{ $fromAI('Status', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments?status={{ $fromAI('Status', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -288,7 +288,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments?carrier={{ $fromAI('Carrier', ``, 'string') }}",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments?carrier={{ $fromAI('Carrier', ``, 'string') }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -299,7 +299,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/shipments/stats",
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments/stats",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequestTool",
@@ -307,6 +307,50 @@
       "position": [200, 600],
       "id": "get-shipment-stats",
       "name": "Get Shipment Stats"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/orders/user/{{ $fromAI('User ID (MongoDB ObjectId)', `Example: 68c6963a9782e57bb50fcc1e`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [400, 100],
+      "id": "get-orders-by-user-id",
+      "name": "Get Orders By User ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/carts/user/{{ $fromAI('User ID (MongoDB ObjectId)', `Example: 68c6963a9782e57bb50fcc1e`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [400, 200],
+      "id": "get-carts-by-user-id",
+      "name": "Get Carts By User ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/checkouts/user/{{ $fromAI('User ID (MongoDB ObjectId)', `Example: 68c6963a9782e57bb50fcc1e`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [400, 300],
+      "id": "get-checkouts-by-user-id",
+      "name": "Get Checkouts By User ID"
+    },
+    {
+      "parameters": {
+        "url": "https://ecomm-mock-backend-uith.vercel.app/api/shipments/user/{{ $fromAI('User ID (MongoDB ObjectId)', `Example: 68c6963a9782e57bb50fcc1e`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [400, 400],
+      "id": "get-shipments-by-user-id",
+      "name": "Get Shipments By User ID"
     }
   ],
   "connections": {
@@ -392,6 +436,18 @@
       "ai_tool": [[]]
     },
     "Get Shipment Stats": {
+      "ai_tool": [[]]
+    },
+    "Get Orders By User ID": {
+      "ai_tool": [[]]
+    },
+    "Get Carts By User ID": {
+      "ai_tool": [[]]
+    },
+    "Get Checkouts By User ID": {
+      "ai_tool": [[]]
+    },
+    "Get Shipments By User ID": {
       "ai_tool": [[]]
     }
   },

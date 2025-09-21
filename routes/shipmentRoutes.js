@@ -5,6 +5,7 @@ const {
   getAllShipments,
   getShipmentById,
   getShipmentByTrackingNumber,
+  getShipmentsByUserId,
   updateShipment,
   addTrackingEvent,
   markAsDelivered,
@@ -298,5 +299,54 @@ router.put("/:id", updateShipment);
  *         description: Shipment not found
  */
 router.post("/:id/events", addTrackingEvent);
+
+/**
+ * @swagger
+ * /api/shipments/user/{user_id}:
+ *   get:
+ *     summary: Get all shipments for a specific user (through their orders)
+ *     tags: [Shipments]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *       - in: query
+ *         name: carrier
+ *         schema:
+ *           type: string
+ *         description: Filter by carrier
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: List of shipments for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Shipment'
+ *                 pagination:
+ *                   type: object
+ */
+router.get("/user/:user_id", getShipmentsByUserId);
 
 module.exports = router;

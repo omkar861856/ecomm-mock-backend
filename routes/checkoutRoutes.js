@@ -5,6 +5,7 @@ const {
   getAllCheckouts,
   getCheckoutById,
   getCheckoutByCheckoutId,
+  getCheckoutsByUserId,
   updateCheckout,
   completeCheckout,
   failCheckout,
@@ -278,5 +279,54 @@ router.put("/:id", updateCheckout);
  *         description: Checkout not found
  */
 router.post("/:id/complete", completeCheckout);
+
+/**
+ * @swagger
+ * /api/checkouts/user/{user_id}:
+ *   get:
+ *     summary: Get all checkouts for a specific user
+ *     tags: [Checkouts]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *       - in: query
+ *         name: cart_id
+ *         schema:
+ *           type: string
+ *         description: Filter by cart ID
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: List of checkouts for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Checkout'
+ *                 pagination:
+ *                   type: object
+ */
+router.get("/user/:user_id", getCheckoutsByUserId);
 
 module.exports = router;

@@ -240,10 +240,45 @@ const removeItemFromCart = (req, res) => {
   }
 };
 
+// Get all carts by user ID
+const getCartsByUserId = (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    let carts = getAllEntities("carts");
+
+    // Filter by user_id
+    carts = carts.filter((cart) => cart.user_id === user_id);
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedCarts = carts.slice(startIndex, endIndex);
+
+    res.json({
+      success: true,
+      data: paginatedCarts,
+      pagination: {
+        current_page: parseInt(page),
+        total_pages: Math.ceil(carts.length / limit),
+        total_items: carts.length,
+        items_per_page: parseInt(limit),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching carts by user ID",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createCart,
   getAllCarts,
   getCartById,
+  getCartsByUserId,
   updateCart,
   deleteCart,
   addItemToCart,

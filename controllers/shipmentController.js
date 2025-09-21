@@ -236,10 +236,61 @@ const getShipmentTracking = (req, res) => {
   }
 };
 
+// Get all shipments by user ID (through orders)
+const getShipmentsByUserId = (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { carrier, page = 1, limit = 10 } = req.query;
+    
+    // First get all orders for this user
+    const orders = getAllEntities("orders");
+    const userOrders = orders.filter((order) => order.user_id === user_id);
+    const userOrderIds = userOrders.map((order) => order.order_id);
+    
+    // Then get all shipments for these orders
+    let shipments = getAllEntities("shipments");
+    shipments = shipments.filter((shipment) => 
+      userOrderIds.includes(shipment.order_id)
+    );
+
+    // Apply additional filters
+    if (carrier) {
+      shipments = shipments.filter(
+        (shipment) =>
+          shipment.carrier &&
+          shipment.carrier.toLowerCase().includes(carrier.toLowerCase())
+      );
+    }
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedShipments = shipments.slice(startIndex, endIndex);
+
+    res.json({
+      success: true,
+      data: paginatedShipments,
+      pagination: {
+        current_page: parseInt(page),
+        total_pages: Math.ceil(shipments.length / limit),
+        total_items: shipments.length,
+        items_per_page: parseInt(limit),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching shipments by user ID",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createShipment,
   getAllShipments,
   getShipmentById,
+  getShipmentsByUserId,
   updateShipment,
   deleteShipment,
   addTrackingEvent,

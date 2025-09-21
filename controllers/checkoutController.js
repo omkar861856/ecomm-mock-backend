@@ -258,10 +258,50 @@ const completeCheckout = (req, res) => {
   }
 };
 
+// Get all checkouts by user ID
+const getCheckoutsByUserId = (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { cart_id, page = 1, limit = 10 } = req.query;
+    let checkouts = getAllEntities("checkouts");
+
+    // Filter by user_id
+    checkouts = checkouts.filter((checkout) => checkout.user_id === user_id);
+
+    // Apply additional filters
+    if (cart_id) {
+      checkouts = checkouts.filter((checkout) => checkout.cart_id === cart_id);
+    }
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedCheckouts = checkouts.slice(startIndex, endIndex);
+
+    res.json({
+      success: true,
+      data: paginatedCheckouts,
+      pagination: {
+        current_page: parseInt(page),
+        total_pages: Math.ceil(checkouts.length / limit),
+        total_items: checkouts.length,
+        items_per_page: parseInt(limit),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching checkouts by user ID",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createCheckout,
   getAllCheckouts,
   getCheckoutById,
+  getCheckoutsByUserId,
   updateCheckout,
   deleteCheckout,
   completeCheckout,

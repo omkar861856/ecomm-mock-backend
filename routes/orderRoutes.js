@@ -5,6 +5,7 @@ const {
   getAllOrders,
   getOrderById,
   getOrderByNumber,
+  getOrdersByUserId,
   updateOrder,
   updateOrderStatus,
   cancelOrder,
@@ -526,5 +527,55 @@ router.post("/:id/refund", processRefund);
  *         description: Order statistics
  */
 router.get("/stats", getOrderStats);
+
+/**
+ * @swagger
+ * /api/orders/user/{user_id}:
+ *   get:
+ *     summary: Get all orders for a specific user
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [PLACED, CONFIRMED, PICKED, PACKED, SHIPPED, IN_TRANSIT, OUT_FOR_DELIVERY, DELIVERED, RETURN_REQUESTED, RETURNED, REFUNDED, CANCELLED]
+ *         description: Filter by order status
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: List of orders for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Order'
+ *                 pagination:
+ *                   type: object
+ */
+router.get("/user/:user_id", getOrdersByUserId);
 
 module.exports = router;

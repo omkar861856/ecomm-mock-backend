@@ -505,10 +505,18 @@ const getCheckoutStats = async (req, res) => {
   }
 };
 
+// Get all checkouts by user ID (alias for getAllCheckouts with user_id parameter)
+const getCheckoutsByUserId = async (req, res) => {
+  // Extract user_id from params and add it to query
+  req.query.user_id = req.params.user_id;
+  return getAllCheckouts(req, res);
+};
+
 module.exports = {
   getAllCheckouts,
   getCheckoutById,
   getCheckoutByCheckoutId,
+  getCheckoutsByUserId,
   createCheckout,
   updateCheckout,
   completeCheckout,

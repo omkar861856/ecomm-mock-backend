@@ -480,10 +480,106 @@ const getShipmentStats = async (req, res) => {
   }
 };
 
+// Get all shipments by user ID (through orders)
+const getShipmentsByUserId = async (req, res) => {
+  try {
+    // Check database connection
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        success: false,
+        message: "Database connection not available",
+        error: "Service temporarily unavailable",
+      });
+    }
+
+    const { user_id } = req.params;
+    const {
+      carrier,
+      status,
+      page = 1,
+      limit = 10,
+      sort = "createdAt",
+      order = "desc",
+    } = req.query;
+
+    // Validate user ID format
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID format",
+        error: "User ID must be a valid MongoDB ObjectId",
+      });
+    }
+
+    // Validate pagination parameters
+    const pageNum = Math.max(1, parseInt(page));
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit)));
+
+    // First, get all orders for this user
+    const Order = require("../../models/mongodb/Order");
+    const userOrders = await Order.find({ userId: user_id }).select("_id");
+    const orderIds = userOrders.map(order => order._id);
+
+    if (orderIds.length === 0) {
+      return res.json({
+        success: true,
+        data: [],
+        pagination: {
+          current_page: pageNum,
+          total_pages: 0,
+          total_items: 0,
+          items_per_page: limitNum,
+        },
+      });
+    }
+
+    // Build query for shipments
+    let query = { orderId: { $in: orderIds } };
+    if (carrier) query.carrier = carrier;
+    if (status) query.status = status;
+
+    // Build sort object
+    const sortOrder = order === "desc" ? -1 : 1;
+    const sortObj = {};
+    sortObj[sort] = sortOrder;
+
+    // Pagination
+    const skip = (pageNum - 1) * limitNum;
+
+    const shipments = await Shipment.find(query)
+      .populate("orderId", "userId orderNumber status")
+      .populate("orderId.userId", "name email")
+      .sort(sortObj)
+      .skip(skip)
+      .limit(limitNum);
+
+    const totalShipments = await Shipment.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: shipments,
+      pagination: {
+        current_page: pageNum,
+        total_pages: Math.ceil(totalShipments / limitNum),
+        total_items: totalShipments,
+        items_per_page: limitNum,
+      },
+    });
+  } catch (error) {
+    console.error("Error in getShipmentsByUserId:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching shipments by user ID",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllShipments,
   getShipmentById,
   getShipmentByTrackingNumber,
+  getShipmentsByUserId,
   createShipment,
   updateShipment,
   addTrackingEvent,

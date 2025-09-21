@@ -446,10 +446,18 @@ const getCartStats = async (req, res) => {
   }
 };
 
+// Get all carts by user ID (alias for getAllCarts with user_id parameter)
+const getCartsByUserId = async (req, res) => {
+  // Extract user_id from params and add it to query
+  req.query.user_id = req.params.user_id;
+  return getAllCarts(req, res);
+};
+
 module.exports = {
   getAllCarts,
   getCartById,
   getActiveCart,
+  getCartsByUserId,
   createCart,
   updateCart,
   deleteCart,

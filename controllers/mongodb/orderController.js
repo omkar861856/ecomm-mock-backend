@@ -548,10 +548,18 @@ const getOrderStats = async (req, res) => {
   }
 };
 
+// Get all orders by user ID (alias for getAllOrders with user_id parameter)
+const getOrdersByUserId = async (req, res) => {
+  // Extract user_id from params and add it to query
+  req.query.user_id = req.params.user_id;
+  return getAllOrders(req, res);
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
   getOrderByNumber,
+  getOrdersByUserId,
   createOrder,
   updateOrder,
   updateOrderStatus,

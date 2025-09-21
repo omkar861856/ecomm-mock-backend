@@ -5,6 +5,7 @@ const {
   getAllCarts,
   getCartById,
   getActiveCart,
+  getCartsByUserId,
   updateCart,
   deleteCart,
   addItemToCart,
@@ -380,5 +381,49 @@ router.get("/user/:userId/active", getActiveCart);
  *         description: Cart statistics
  */
 router.get("/stats", getCartStats);
+
+/**
+ * @swagger
+ * /api/carts/user/{user_id}:
+ *   get:
+ *     summary: Get all carts for a specific user
+ *     tags: [Carts]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: List of carts for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Cart'
+ *                 pagination:
+ *                   type: object
+ */
+router.get("/user/:user_id", getCartsByUserId);
 
 module.exports = router;
