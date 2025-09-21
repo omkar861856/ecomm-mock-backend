@@ -21,12 +21,11 @@ const connectDB = async () => {
 
       mongoURI = `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${database}?retryWrites=true&w=majority&appName=${cluster}`;
     } else {
-      // Fallback to default (for development only)
-      console.warn(
-        "⚠️  Using default MongoDB connection string. Please set MONGODB_URI or individual MongoDB credentials in environment variables."
+      // No MongoDB configuration found
+      console.error(
+        "❌ MongoDB configuration not found. Please set MONGODB_URI or individual MongoDB credentials in environment variables."
       );
-      mongoURI =
-        "mongodb+srv://ecomm_mock:QUSAEpWfeg1aSWAA@cluster0.wttchje.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0";
+      throw new Error("MongoDB connection string is required");
     }
 
     const conn = await mongoose.connect(mongoURI);

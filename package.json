@@ -4,7 +4,7 @@
   "description": "E-commerce API with CRUD operations for products, users, orders, and more",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "dev": "nodemon server.js",
     "seed": "node scripts/seedData.js",
     "seed-mongo": "node scripts/seedMongoDB.js",
