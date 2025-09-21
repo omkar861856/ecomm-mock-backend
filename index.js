@@ -227,22 +227,39 @@ const swaggerOptions = {
 
 const specs = swaggerJsdoc(swaggerOptions);
 
-// Swagger UI - only enable in development or when explicitly enabled
-if (
-  process.env.NODE_ENV !== "production" ||
-  process.env.ENABLE_SWAGGER === "true"
-) {
-  app.use(
-    "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup(specs, {
-      explorer: true,
-      customCss: ".swagger-ui .topbar { display: none }",
-      customSiteTitle: process.env.API_TITLE || "E-commerce API Documentation",
-    })
-  );
-  console.log(`📚 Swagger documentation available at /api-docs`);
-}
+// Swagger UI - always enable for better API documentation
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, {
+    explorer: true,
+    customCss: ".swagger-ui .topbar { display: none }",
+    customSiteTitle: process.env.API_TITLE || "E-commerce API Documentation",
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      docExpansion: 'none',
+      filter: true,
+      showExtensions: true,
+      showCommonExtensions: true,
+      tryItOutEnabled: true,
+      urls: [
+        {
+          url: '/api-docs/swagger.json',
+          name: 'E-commerce API'
+        }
+      ]
+    }
+  })
+);
+
+// Serve Swagger JSON
+app.get('/api-docs/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(specs);
+});
+
+console.log(`📚 Swagger documentation available at /api-docs`);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

@@ -7,15 +7,19 @@
   ],
   "routes": [
     {
+      "src": "/api-docs/swagger.json",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/api-docs/(.*)",
+      "dest": "/index.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/index.js"
     },
     {
       "src": "/health",
-      "dest": "/index.js"
-    },
-    {
-      "src": "/api-docs",
       "dest": "/index.js"
     },
     {
@@ -25,5 +29,10 @@
   ],
   "env": {
     "NODE_ENV": "production"
+  },
+  "functions": {
+    "index.js": {
+      "maxDuration": 30
+    }
   }
 }
